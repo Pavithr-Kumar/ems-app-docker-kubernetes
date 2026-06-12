@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: springboot-deployment
+    labels:
+        app: ems-app
+
+spec:
+    replicas: 2 # Scale horizontally with 2 pods
+
+    selector:
+        matchLabels:
+            app: ems-app
+
+    template:
+        metadata:
+            labels:
+                app: ems-app
+
+        spec:
+            containers:
+                - name: springboot-container
+                  image: pavithrkumar/ems-app:v1 # Replace with your image
+
+                  ports:
+                      - containerPort: 8080
+
+                  env:
+                      # DB URL using Kubernetes Service name
+                      - name: MYSQL_SERVICE
+                        value: "mysql-service"
+
+                      - name: MYSQL_PORT
+                        value: "3306"
+
+                      - name: SPRING_DATASOURCE_USERNAME
+                        value: "root"
+
+                      - name: SPRING_DATASOURCE_PASSWORD
+                        valueFrom:
+                            secretKeyRef:
+                                name: mysql-credentials
+                                key: mysql-root-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: springboot-service
+
+spec:
+    type: NodePort # Exposes app externally
+
+    selector:
+        app: ems-app
+
+    ports:
+        - port: 80 # Service port (internal cluster)
+          targetPort: 8080 # Container port
+          nodePort: 31180 # External access port
