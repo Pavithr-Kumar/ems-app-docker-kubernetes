@@ -25,9 +25,18 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+
+      - name: Build artifact
+        run: |
+          echo "Hello world, welcom" >> art.txt
+          echo "file generated"
       
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
+        with:
+          path: .
+
+
 
       # Runs a single command using the runners shell
       - name: Show Env and pass
