@@ -20,7 +20,8 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     env:
-      APP_ENV: hello Mother
+      APP_ENV: Dev
+      DB_PASSWORD: ${{secrets.DB_PASSWORD}}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -29,8 +30,8 @@ jobs:
       - uses: actions/checkout@v4
 
       # Runs a single command using the runners shell
-      - name: Show Env
-        run: echo "Hello, world! $APP_ENV"
+      - name: Show Env and pass
+        run: echo "Using $APP_ENV and password is $DB_PASSWORD"
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
