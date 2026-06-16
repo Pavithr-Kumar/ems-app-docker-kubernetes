@@ -47,3 +47,17 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+
+  test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    needs: build
+    # env:
+    #   APP_ENV: Dev
+    #   DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      - name: Test Step
+        run: echo "testing all apps"
