@@ -2,8 +2,6 @@ name: Context Demo Pipeline
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
 
 env:
   GLOBAL_ENV: "This is a global environment variable"
