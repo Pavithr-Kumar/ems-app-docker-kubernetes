@@ -1,0 +1,55 @@
+name: Context Demo Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+env:
+  GLOBAL_ENV: "This is a global environment variable"
+
+jobs:
+  context-demo:
+    runs-on: ubuntu-latest
+
+    env:
+      JOB_ENV: "This is job-level env"
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Print GitHub Context
+        run: |
+          echo "Repository: ${{ github.repository }}"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Event Name: ${{ github.event_name }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Branch: ${{ github.ref }}"
+          echo "Commit SHA: ${{ github.sha }}"
+
+      - name: Print Environment Variables
+        run: |
+          echo "Global ENV: $GLOBAL_ENV"
+          echo "Job ENV: $JOB_ENV"
+
+      - name: Set Step Output
+        id: step1
+        run: |
+          echo "message=Hello from step output" >> $GITHUB_OUTPUT
+
+      - name: Use Step Output
+        run: |
+          echo "Step Output Message: ${{ steps.step1.outputs.message }}"
+
+      - name: Print Runner Context
+        run: |
+          echo "Runner OS: ${{ runner.os }}"
+          echo "Runner Temp Dir: ${{ runner.temp }}"
+
+      - name: Conditional Execution Example
+        if: github.event_name == 'push'
+        run: echo "This runs only on push event"
+
+      - name: Use Secrets (Example)
+        run: echo "Using secret (masked) ${{ secrets.MY_SECRET }}"
